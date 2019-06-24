@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="https://cdn.bootcss.com/redux/4.0.1/redux.min.js"></script>
+</head>
+
+<body>
+    <div>
+        <p>Clicked:<span id="count">0</span> times</p>
+        <button id="incre-btn">+</button>
+        <button id="decre-btn">-</button>
+        <button id="incre-odd-btn">Increment if odd</button>
+        <button id="incre-async-btn">Increment async</button>
+    </div>
+    <script>
+        const reducer = (preState = 0, action) => {
+            switch (action.type) {
+                case 'INCRE':
+                    return preState + 1;
+                case 'DECRE':
+                    return preState - 1;
+                default:
+                    return preState;
+            }
+        }
+
+        const store = Redux.createStore(reducer);
+
+        document.querySelector('#incre-btn').addEventListener('click', () => {
+            store.dispatch({
+                type: 'INCRE'
+            });
+        })
+
+        document.querySelector('#decre-btn').addEventListener('click', () => {
+            store.dispatch({
+                type: 'DECRE'
+            })
+        })
+
+        document.querySelector('#incre-odd-btn').addEventListener('click', () => {
+            if (store.getState() % 2 !== 0) {
+                store.dispatch({
+                    type: 'INCRE'
+                })
+            }
+        })
+
+        document.querySelector('#incre-async-btn').addEventListener('click', () => {
+            setTimeout(() => {
+                store.dispatch({
+                    type: 'INCRE'
+                })
+            }, 1000)
+        })
+
+        const render = () => {
+            document.querySelector('#count').innerHTML = store.getState();
+        }
+
+        store.subscribe(render)
+    </script>
+</body>
+
+</html>
